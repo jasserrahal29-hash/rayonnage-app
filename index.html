@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur & Layout de Rayonnage</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-navbar d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+        <span class="fw-semibold text-white"><i class="fa-solid fa-warehouse me-2"></i>Aménagement & Calculateur de Dépôt</span>
+    </div>
+    <button class="btn btn-sm btn-outline-secondary" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Imprimer / PDF</button>
+</div>
+
+<div class="container-fluid px-4 py-4">
+
+    <div class="main-card p-4">
+        <div class="row g-4">
+            
+            <!-- Side Controls -->
+            <div class="col-lg-4">
+                
+                <!-- 1. Dimensions du Dépôt -->
+                <div class="card-title-custom mb-3"><i class="fa-solid fa-ruler-combined me-2"></i>1. DIMENSIONS DU DÉPÔT (MÈTRES)</div>
+                <div class="row g-2 mb-3">
+                    <div class="col-4">
+                        <label class="form-label-custom">Longueur (m)</label>
+                        <input type="number" id="depotL" class="form-control" value="20" min="1" oninput="calculate()">
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label-custom">Largeur (m)</label>
+                        <input type="number" id="depotW" class="form-control" value="10" min="1" oninput="calculate()">
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label-custom">Hauteur (m)</label>
+                        <input type="number" id="depotH" class="form-control" value="5" min="1" oninput="calculate()">
+                    </div>
+                </div>
+
+                <div class="price-card mb-4 border-secondary border-opacity-50">
+                    <div class="d-flex justify-content-between small text-secondary">
+                        <span>Surface totale: <b class="text-white" id="resSurface">200 m²</b></span>
+                        <span>Volume: <b class="text-white" id="resVolume">1000 m³</b></span>
+                    </div>
+                </div>
+
+                <!-- 2. Import File (Images & PDF) -->
+                <div class="card-title-custom mb-3"><i class="fa-solid fa-file-pdf me-2"></i>2. PLAN DU DÉPÔT (IMAGE OU PDF)</div>
+                <div class="mb-4">
+                    <input type="file" id="fileUploader" class="form-control" accept="image/*,application/pdf" onchange="handleFileUpload(event)">
+                    <small class="text-secondary mt-1 d-block">Formats acceptés: JPG, PNG, PDF</small>
+                </div>
+
+                <!-- 3. Configuration Rayonnage -->
+                <div class="card-title-custom mb-3"><i class="fa-solid fa-sliders me-2"></i>3. CONFIGURATION RAYONNAGE</div>
+                <form id="rackForm">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label-custom">Nombre de Travées</label>
+                            <input type="number" id="numBays" class="form-control" value="5" min="1" max="20" oninput="calculate()">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label-custom">Niveaux / Travée</label>
+                            <input type="number" id="numLevels" class="form-control" value="4" min="1" max="8" oninput="calculate()">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label-custom">Angle de Rotation (°)</label>
+                        <input type="range" id="rackAngle" class="form-range" min="0" max="360" value="0" oninput="drawCanvas()">
+                    </div>
+                </form>
+
+                <!-- Financial Result -->
+                <div class="mt-4">
+                    <div class="card-title-custom mb-2"><i class="fa-solid fa-tag me-2"></i>DEVIS ESTIMATIF</div>
+                    <div class="price-card border-primary border-opacity-50 d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold text-white">TOTAL ESTIMÉ</span>
+                        <span id="resTotalPrice" class="price-highlight">3 440 TND</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas View Area -->
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="card-title-custom"><i class="fa-solid fa-map me-2"></i>DISPOSITION SUR PLAN (GLISSER & DISPOSER)</div>
+                    <small class="text-secondary">Déplacez le rayonnage sur l'image ou le PDF</small>
+                </div>
+                
+                <div class="canvas-container">
+                    <canvas id="warehouseCanvas" width="750" height="500"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- PDF.js External Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<!-- Custom JS Logic -->
+<script src="js/app.js"></script>
+</body>
+</html>
